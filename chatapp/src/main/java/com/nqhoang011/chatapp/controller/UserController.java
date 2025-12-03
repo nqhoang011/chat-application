@@ -1,9 +1,11 @@
 package com.nqhoang011.chatapp.controller;
 
+import com.nqhoang011.chatapp.dto.request.ApiResponse;
 import com.nqhoang011.chatapp.dto.request.UserCreateRequest;
 import com.nqhoang011.chatapp.dto.request.UserUpdateRequest;
 import com.nqhoang011.chatapp.entity.User;
 import com.nqhoang011.chatapp.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +19,11 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    User createUser(@RequestBody UserCreateRequest request) {
-        return userService.createUser(request);
+    ApiResponse<User> createUser(@RequestBody @Valid UserCreateRequest request) {
+        ApiResponse<User> response = new ApiResponse<>();
+
+        response.setResult(userService.createUser(request));
+        return response;
     }
 
     @GetMapping
