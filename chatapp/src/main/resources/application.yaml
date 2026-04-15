@@ -7,10 +7,12 @@ spring:
   application:
     name: chatapp
   datasource:
-    url: jdbc:postgresql://localhost:5432/chat_app
-    username: postgres
-    password: root
+    url: {DATASOURCE_URL}
+    username: {DATASOURCE_USERNAME}
+    password: {DATASOURCE_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+jwt:
+  signer-key: {JWT_SIGNER_KEY}
