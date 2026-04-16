@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -14,9 +15,9 @@ import java.util.UUID;
 public class UserResponse {
     UUID id;
     String username;
-    String password;
     String phoneNumber;
     String firstName;
     String lastName;
     LocalDate dob;
+    Set<String> roles;
 }

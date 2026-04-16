@@ -4,6 +4,7 @@ import com.nqhoang011.chatapp.dto.request.UserCreateRequest;
 import com.nqhoang011.chatapp.dto.request.UserUpdateRequest;
 import com.nqhoang011.chatapp.dto.response.UserResponse;
 import com.nqhoang011.chatapp.entity.User;
+import com.nqhoang011.chatapp.enums.Role;
 import com.nqhoang011.chatapp.exception.AppException;
 import com.nqhoang011.chatapp.exception.ErrorCode;
 import com.nqhoang011.chatapp.mapper.UserMapper;
@@ -17,7 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -29,6 +32,8 @@ public class UserService {
 
     UserMapper userMapper;
 
+    PasswordEncoder passwordEncoder;
+
     public User createUser(UserCreateRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())
@@ -37,14 +42,20 @@ public class UserService {
         }
 
         User user = userMapper.toUser(request);
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        Set<String> roles = new HashSet<>();
+        roles.add(Role.USER.name());
+        user.setRoles(roles);
 
         return userRepository.save(user);
     }
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(userMapper::toUserResponse)
+                .toList();
     }
 
     public UserResponse getUser(UUID userId) {
